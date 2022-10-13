@@ -1,0 +1,11 @@
+Django
+mysqlclient
+psycopg2
+numpy
+pandas
+scipy
+django-environ
+django-pandas
+plotly
+django-import-export
+django-admin
