@@ -9,3 +9,4 @@ django-pandas
 plotly
 django-import-export
 django-admin
+gunicorn
