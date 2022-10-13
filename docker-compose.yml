@@ -21,6 +21,8 @@ services:
     # コンテナ内の環境変数を.envを使って設定
     env_file:
       - .env
+    ports:
+      - 3306:3306
     # DBのコンテナのヘルスチェックを行う
     # mysqladmin(MySQLサーバーの管理を行うクライアントを使ってDBコンテナ自身(127.0.0.1)にpingを送ってヘルスチェックを行う
     healthcheck:
