@@ -18,6 +18,7 @@ services:
     # ローカルの/data/dbをコンテナの/var/lib/mysqlにマウントする
     volumes:
       - db_data:/var/lib/mysql
+      #永続化の確認
     # コンテナ内の環境変数を.envを使って設定
     env_file:
       - .env
