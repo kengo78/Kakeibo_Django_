@@ -16,7 +16,7 @@ DEBUG = os.environ.get("DEBUG")
 
 # ALLOWED_HOSTSを.envから取得
 # ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
-ALLOWED_HOSTS=['localhost' ,'127.0.0.1']
+ALLOWED_HOSTS=['localhost' ,'127.0.0.1','0.0.0.0']
 
 
 # Application definition
