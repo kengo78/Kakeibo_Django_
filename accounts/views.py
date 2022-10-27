@@ -3,7 +3,7 @@ from django.http.response import HttpResponseRedirect
 from django.views.generic import TemplateView, CreateView
 from django.contrib.auth import login, authenticate
 from django.urls import reverse_lazy
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, LogoutView
 # Create your views here.
 from .forms import LoginForm, SignUpForm
 
@@ -25,6 +25,10 @@ class SignUpView(CreateView):
 class Login(LoginView):
     form_class=LoginForm
     template_name = 'accounts/login.html'
+    
+class Logout(LogoutView):
+    template_name = 'accounts/logout.html'
+    
 # def login(request):
 #     if request.method=="POST":
 #         email = request.POST.get('email')
