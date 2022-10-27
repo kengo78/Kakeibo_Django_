@@ -1,4 +1,33 @@
-{% extends "kakeiboapp/base.html" %} 
+{% extends "kakeiboapp/base.html" %}
+<!-- コンテンツ -->
+{% block content %}
+<div class="container">
+  <div class="col-md-6 offset-md-3">
+    <div class="card mt-3 mb-3 bg-light">
+      <!-- カードヘッダー -->
+      <div class="card-header bg-primary text-light">
+        <h4>Log in</h4>
+      </div>
+      <!-- カードボディー -->
+      <div class="card-body">
+        <form action="" method="POST">
+          {{ form.non_field_errors }}
+          {% for field in form %}
+            {{ field }}
+            {{ field.errors }}
+            <br>
+          {% endfor %}
+          <button type="submit" class="btn btn-primary" >ログイン</button>
+          <input type="hidden" name="next" value="{{ next }}" />
+          {% csrf_token %}
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% comment %} {% extends "kakeiboapp/base.html" %} 
 {% block title %}ログイン{% endblock %}
 {% block content %}
 <h1>Login</h1>
@@ -8,11 +37,12 @@
     <form action="{% url 'accounts:login' %}" method="POST">
         {% csrf_token %}
         <label for="email">メールアドレス</label>
-        <input type="text" name="email" id="email" value="">    
+        {{ form.as_p }}
+        <p><input type="text" name="email" id="email" value="email"></p>    
         <br>
         <label for="password">パスワード</label>
-        <input type="password" name="password" id="password" value="">
+        <p><input type="password" name="password" id="password" value=""></p>
         <br>
         <input type="submit" value="login">
     </form>
-{% endblock %}
+{% endblock %} {% endcomment %}

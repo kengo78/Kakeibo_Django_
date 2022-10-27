@@ -3,5 +3,13 @@
 
 {% block content %}
 <h1>ホーム</h1>
-<p>{{ user.username }}さんようこそ。</p>
+<p>
+    <div>
+        {% if not user.is_authenticated %}
+        こんにちは！ ゲスト さん
+        {% else %}
+        こんにちは！ {{ user.username }} さん
+        {% endif %}
+    </div>
+</p>
 {% endblock %}
