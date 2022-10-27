@@ -1,0 +1,18 @@
+{% extends "kakeiboapp/base.html" %} 
+{% block title %}ログイン{% endblock %}
+{% block content %}
+<h1>Login</h1>
+    {% if error_message %}
+    <p><strong style="color: red;">{{ error_message }}</strong></p>
+    {% endif %}
+    <form action="{% url 'accounts:login' %}" method="POST">
+        {% csrf_token %}
+        <label for="email">メールアドレス</label>
+        <input type="text" name="email" id="email" value="">    
+        <br>
+        <label for="password">パスワード</label>
+        <input type="password" name="password" id="password" value="">
+        <br>
+        <input type="submit" value="login">
+    </form>
+{% endblock %}
