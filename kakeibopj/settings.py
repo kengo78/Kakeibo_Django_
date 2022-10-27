@@ -16,7 +16,7 @@ DEBUG = os.environ.get("DEBUG")
 
 # ALLOWED_HOSTSを.envから取得
 # ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
-ALLOWED_HOSTS=['localhost' ,'127.0.0.1']
+ALLOWED_HOSTS=['localhost' ,'127.0.0.1','0.0.0.0']
 
 
 # Application definition
@@ -41,6 +41,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware'
 ]
 
 ROOT_URLCONF = 'kakeibopj.urls'
@@ -48,6 +49,7 @@ ROOT_URLCONF = 'kakeibopj.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        # 'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -62,7 +64,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'kakeibopj.wsgi.application'
-
+LOGIN_URL = 'accounts:login' # ログインのURLの設定
+LOGIN_REDIRECT_URL = 'accounts:home' #ログインが完了した後に遷移するURL
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
