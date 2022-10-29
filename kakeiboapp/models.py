@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from accounts.models import User
 # Create your models here.
 class PaymentCategory(models.Model):#支払いのカテゴリ
     name = models.CharField('カテゴリ名', max_length=16)
@@ -14,6 +15,7 @@ class PaymentCardCategory(models.Model):
         return self.name
     
 class Payment(models.Model):#支払額
+    user = models.ForeignKey(User, verbose_name='ユーザー', on_delete=models.PROTECT)
     date = models.DateField('日付')
     price = models.IntegerField('金額')
     category = models.ForeignKey(PaymentCategory, on_delete=models.PROTECT, verbose_name='カテゴリ')
@@ -29,6 +31,7 @@ class IncomeCategory(models.Model):
 
 
 class Income(models.Model):
+    user = models.ForeignKey(User, verbose_name='ユーザー', on_delete=models.PROTECT)
     date = models.DateField('日付')
     price = models.IntegerField('金額')
     category = models.ForeignKey(IncomeCategory, on_delete=models.PROTECT, verbose_name='カテゴリ')
@@ -41,6 +44,7 @@ class BankCategory(models.Model):
         return self.name
 
 class Rest(models.Model):
+    user = models.ForeignKey(User, verbose_name='ユーザー', on_delete=models.PROTECT)
     date = models.DateField('日付',default=timezone.now)
     rest = models.IntegerField('金額')
     category = models.ForeignKey(BankCategory, on_delete=models.PROTECT,verbose_name='銀行')
