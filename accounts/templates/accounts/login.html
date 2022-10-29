@@ -8,7 +8,6 @@
       <div class="card-header bg-primary text-light">
         <h4>Log in</h4>
       </div>
-      <!-- カードボディー -->
       <div class="card-body">
         <form action="" method="POST">
           {{ form.non_field_errors }}
@@ -17,9 +16,28 @@
             {{ field.errors }}
             <br>
           {% endfor %}
-          <button type="submit" class="btn btn-primary" >ログイン</button>
+          <button type="button submit" class="btn btn-primary" >ログイン</button>
           <input type="hidden" name="next" value="{{ next }}" />
           {% csrf_token %}
+          <div class="text-center">
+            <p>Not a member? <a href="#!">Register</a></p>
+            <p>or sign up with:</p>
+            <button type="button" class="btn btn-link btn-floating mx-1">
+              <i class="fab fa-facebook-f"></i>
+            </button>
+        
+            <button type="button" class="btn btn-link btn-floating mx-1">
+              <i class="fab fa-google"></i>
+            </button>
+        
+            <button type="button" class="btn btn-link btn-floating mx-1">
+              <i class="fab fa-twitter"></i>
+            </button>
+        
+            <button type="button" class="btn btn-link btn-floating mx-1">
+              <i class="fab fa-github"></i>
+            </button>
+          </div>
         </form>
       </div>
     </div>
