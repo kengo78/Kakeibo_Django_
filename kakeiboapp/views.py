@@ -235,7 +235,7 @@ class PaymentCreate(generic.CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['page_title'] = '支出登録'
+        context['page_title'] = 'Payment Registration'
         return context
 
     def get_success_url(self):
@@ -259,7 +259,7 @@ class IncomeCreate(generic.CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['page_title'] = '収入登録'
+        context['page_title'] = 'Income Registration'
         return context
 
     def get_success_url(self):
@@ -282,7 +282,7 @@ class RestCreate(generic.CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['page_title'] = '残高登録'
+        context['page_title'] = 'Rest Registration'
         return context
 
     def get_success_url(self):
