@@ -62,16 +62,16 @@
                   <a class="nav-link active" aria-current="page" href="{% url 'kakeiboapp:transition' %}">収支推移</a>
                 </li>
                 {% if not user.is_authenticated %}
-                <li class="nav-item">
+                {% comment %} <li class="nav-item">
                   <a class="nav-link" href="{% url 'accounts:login' %}">Log in</a>
-                </li>
+                </li> {% endcomment %}
                 {% else %}
                 {% comment %} こんにちは！ {{ user.username }} さん {% endcomment %}
                 <li class="nav-item">
-                  <a class="nav-link" href="{% url 'accounts:my_page' user.pk %}">My page</a>
+                  <a class="nav-link active" href="{% url 'accounts:my_page' user.pk %}">My page</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="{% url 'accounts:logout' %}">Log out</a>
+                  <a class="nav-link active" href="{% url 'accounts:logout' %}">Log out</a>
                 </li>
                 {% endif %}
               </ul>
