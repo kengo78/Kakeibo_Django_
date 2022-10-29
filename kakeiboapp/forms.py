@@ -114,7 +114,8 @@ class PaymentCreateForm(forms.ModelForm):
 
     class Meta:
         model = Payment
-        fields = '__all__'
+        # fields = '__all__'
+        fields = ['date', 'price', 'category', 'cardcategory', 'description']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -128,7 +129,8 @@ class IncomeCreateForm(forms.ModelForm):
 
     class Meta:
         model = Income
-        fields = '__all__'
+        # fields = '__all__'
+        fields = ['date', 'price', 'category', 'description']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -142,7 +144,8 @@ class RestCreateForm(forms.ModelForm):
 
     class Meta:
         model = Rest
-        fields = '__all__'
+        # fields = '__all__'
+        fields = ['date', 'category', 'rest']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
