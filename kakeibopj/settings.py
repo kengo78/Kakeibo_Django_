@@ -65,7 +65,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'kakeibopj.wsgi.application'
 LOGIN_URL = 'accounts:login' # ログインのURLの設定
-LOGIN_REDIRECT_URL = 'accounts:home' #ログインが完了した後に遷移するURL
+LOGIN_REDIRECT_URL = 'kakeiboapp:index' #ログインが完了した後に遷移するURL
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
