@@ -12,13 +12,13 @@ from .models import *
 
 
     
-class HomeView(TemplateView):
-    template_name = "accounts/home.html"
+# class HomeView(TemplateView):
+#     template_name = "accounts/home.html"
     
 class SignUpView(CreateView):
     form_class = SignUpForm
     template_name = "accounts/signup.html"
-    success_url = reverse_lazy("accounts:home")
+    success_url = reverse_lazy("kakeiboapp:index")
 
     def form_valid(self, form):
         user = form.save()
