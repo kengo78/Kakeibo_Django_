@@ -442,9 +442,9 @@ a.header-title {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.26);
   padding: 10px;
 }
-.hidden_toolbar .modebar {
+{% comment %} .hidden_toolbar .modebar {
   display: none !important;
-}
+} {% endcomment %}
 
 .section-title {
   font-size: 1.4rem;

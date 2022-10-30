@@ -6,7 +6,7 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <title>{% block title %}{% endblock %}</title>    
   </head>
   <body>
@@ -55,9 +55,9 @@
                 <li class="nav-item">
                   <a class="nav-link active" aria-current="page" href="{% url 'kakeiboapp:income_list' %}">収入一覧</a>
                 </li>
-                {% comment %} <li class="nav-item">
-                  <a class="nav-link active" aria-current="page" href="{% url 'kakeiboapp:month_dashboard' now_year now_month%}">月間支出</a>
-                </li> {% endcomment %}
+                <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="{% url 'kakeiboapp:month_dashboard' now_year now_month %}">月間支出</a>
+                </li>
                 <li class="nav-item">
                   <a class="nav-link active" aria-current="page" href="{% url 'kakeiboapp:transition' %}">収支推移</a>
                 </li>

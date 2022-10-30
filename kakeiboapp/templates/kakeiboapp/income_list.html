@@ -20,7 +20,7 @@
     <th>編集</th>
   </tr>
   {% for income in income_list %}
-
+  {% if user.username == income.user.username %}
   <tr>
     <td>{{ income.date }}</td>
     <td>{{ income.category }}</td>
@@ -45,6 +45,7 @@
         </div>
       </td>
   </tr>
+  {% endif %}
   {% endfor %}
 </table>
 

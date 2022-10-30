@@ -9,6 +9,7 @@ from .forms import PaymentSearchForm, IncomeSearchForm, PaymentCreateForm, Incom
 from django.contrib import messages 
 from django.shortcuts import redirect 
 from django.utils import timezone
+from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 
 import numpy as np
 import pandas as pd
@@ -17,7 +18,7 @@ from .plugin_plotly import GraphGenerator
 
 
 
-class IndexView(generic.TemplateView):
+class IndexView(LoginRequiredMixin,generic.TemplateView):
     template_name = "kakeiboapp/index.html"
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -35,14 +36,16 @@ class IndexView(generic.TemplateView):
         #     total += object.price
         #クレカなので先月の利用額
         payments_objects = Payment.objects.filter(
-            date__year = year, date__month = prev_month
+            user=self.request.user,
+            date__year = year, 
+            date__month = prev_month,
         ).order_by("date")
         total_payment = 0
         ## 
         for payment_object in payments_objects:
             total_payment += payment_object.price
         
-        rest_objects = Rest.objects.order_by("date")
+        rest_objects = Rest.objects.filter(user=self.request.user).order_by("date")
         rest_total = 0
         for object in rest_objects:
             rest_total += object.rest
@@ -64,13 +67,13 @@ class IndexView(generic.TemplateView):
         #     return context
         return context
 
-class PaymentList(generic.ListView):
+class PaymentList(LoginRequiredMixin, generic.ListView):
     template_name = 'kakeiboapp/payment_list.html'
     model = Payment
+    # user=self.request.user
     ordering = '-date'
     paginate_by = 5
 
-    # 追加
     def get_queryset(self):
         queryset = super().get_queryset()
         self.form = form = PaymentSearchForm(self.request.GET or None)
@@ -111,20 +114,20 @@ class PaymentList(generic.ListView):
 
         return queryset
     
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        self.form = form = IncomeSearchForm(self.request.GET or None)
+    # def get_queryset(self):
+    #     queryset = super().get_queryset()
+    #     self.form = form = PaymentSearchForm(self.request.GET or None)
 
-        if form.is_valid():
-            year = form.cleaned_data.get('year')
-            if year and year != '0':
-                queryset = queryset.filter(date__year=year)
+    #     if form.is_valid():
+    #         year = form.cleaned_data.get('year')
+    #         if year and year != '0':
+    #             queryset = queryset.filter(user=self.request.user, date__year=year)
 
-            month = form.cleaned_data.get('month')
-            if month and month != '0':
-                queryset = queryset.filter(date__month=month)
+    #         month = form.cleaned_data.get('month')
+    #         if month and month != '0':
+    #             queryset = queryset.filter(user=self.request.user,date__month=month)
 
-        return queryset
+    #     return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -133,7 +136,7 @@ class PaymentList(generic.ListView):
 
         return context
     
-class IncomeList(generic.ListView):
+class IncomeList(LoginRequiredMixin, generic.ListView):
     template_name = 'kakeiboapp/income_list.html'
     model = Income
     ordering = '-date'
@@ -179,20 +182,20 @@ class IncomeList(generic.ListView):
 
         return queryset
 
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        self.form = form = IncomeSearchForm(self.request.GET or None)
+    # def get_queryset(self):
+    #     queryset = super().get_queryset()
+    #     self.form = form = IncomeSearchForm(self.request.GET or None)
 
-        if form.is_valid():
-            year = form.cleaned_data.get('year')
-            if year and year != '0':
-                queryset = queryset.filter(date__year=year)
+    #     if form.is_valid():
+    #         year = form.cleaned_data.get('year')
+    #         if year and year != '0':
+    #             queryset = queryset.filter(date__year=year)
 
-            month = form.cleaned_data.get('month')
-            if month and month != '0':
-                queryset = queryset.filter(date__month=month)
+    #         month = form.cleaned_data.get('month')
+    #         if month and month != '0':
+    #             queryset = queryset.filter(date__month=month)
 
-        return queryset
+    #     return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -200,24 +203,25 @@ class IncomeList(generic.ListView):
 
         return context
     
-class RestList(generic.ListView):
+class RestList(LoginRequiredMixin, generic.ListView):
     template_name = 'kakeiboapp/rest_list.html'
     model = Rest
     ordering = '-date'
     paginate_by = 10
 
     def get_queryset(self):
-        queryset = super().get_queryset()
-        self.form = form = IncomeSearchForm(self.request.GET or None)
+        query_set = Rest.objects.filter(user=self.request.user).order_by('-created_at')
+        # queryset = super().get_queryset()
+        # # self.form = form = IncomeSearchForm(self.request.GET or None)
 
-        if form.is_valid():
-            year = form.cleaned_data.get('year')
-            if year and year != '0':
-                queryset = queryset.filter(date__year=year)
+        # if form.is_valid():
+        #     year = form.cleaned_data.get('year')
+        #     if year and year != '0':
+        #         queryset = queryset.filter(date__year=year)
 
-            month = form.cleaned_data.get('month')
-            if month and month != '0':
-                queryset = queryset.filter(date__month=month)
+        #     month = form.cleaned_data.get('month')
+        #     if month and month != '0':
+        #         queryset = queryset.filter(date__month=month)
 
         return queryset
 
@@ -227,7 +231,7 @@ class RestList(generic.ListView):
 
         return context
     
-class PaymentCreate(generic.CreateView):
+class PaymentCreate(LoginRequiredMixin, generic.CreateView):
     """支出登録"""
     template_name = 'kakeiboapp/register.html'
     model = Payment
@@ -244,14 +248,16 @@ class PaymentCreate(generic.CreateView):
     # 追加
     # バリデーション時にメッセージを保存
     def form_valid(self, form):
-        self.object = payment = form.save()
+        self.object = payment = form.save(commit=False)
+        self.object.user = self.request.user
+        self.object.save()
         # messages.info(self.request,
         #               f'支出を登録しました\n'
         #               f'日付:{payment.date}\n'
         #               f'カテゴリ:{payment.category}\n'
         #               f'金額:{payment.price}円')
         return redirect(self.get_success_url())
-class IncomeCreate(generic.CreateView):
+class IncomeCreate(LoginRequiredMixin, generic.CreateView):
     """収入登録"""
     template_name = 'kakeiboapp/register.html'
     model = Income
@@ -266,7 +272,9 @@ class IncomeCreate(generic.CreateView):
         return reverse_lazy('kakeiboapp:income_list')
     
     def form_valid(self, form):
-        self.object = income = form.save()
+        self.object = income = form.save(commit=False)
+        self.object.user = self.request.user
+        self.object.save()
         # messages.info(self.request,
         #               f'収入を登録しました\n'
         #               f'日付:{income.date}\n'
@@ -274,7 +282,7 @@ class IncomeCreate(generic.CreateView):
         #               f'金額:{income.price}円')
         return redirect(self.get_success_url())
     
-class RestCreate(generic.CreateView):
+class RestCreate(LoginRequiredMixin, generic.CreateView):
     """残高登録"""
     template_name = 'kakeiboapp/register.html'
     model = Rest
@@ -289,7 +297,9 @@ class RestCreate(generic.CreateView):
         return reverse_lazy('kakeiboapp:rest_list')
     
     def form_valid(self, form):
-        self.object = rest = form.save()
+        self.object = rest = form.save(commit=False)
+        self.object.user = self.request.user
+        self.object.save()
         # messages.info(self.request,
         #               f'残高を登録しました\n'
         #               f'日付:{rest.date}\n'
@@ -297,7 +307,7 @@ class RestCreate(generic.CreateView):
         #               f'金額:{rest.rest}円')
         return redirect(self.get_success_url())
     
-class PaymentUpdate(generic.UpdateView):
+class PaymentUpdate(LoginRequiredMixin, generic.UpdateView):
     """支出更新"""
     template_name = 'kakeiboapp/register.html'
     model = Payment
@@ -312,7 +322,9 @@ class PaymentUpdate(generic.UpdateView):
         return reverse_lazy('kakeiboapp:payment_list')
 
     def form_valid(self, form):
-        self.object = payment = form.save()
+        self.object = payment = form.save(commit=False)
+        self.object.user = self.request.user
+        self.object.save()
         # messages.info(self.request,
         #               f'支出を更新しました\n'
         #               f'日付:{payment.date}\n'
@@ -321,7 +333,7 @@ class PaymentUpdate(generic.UpdateView):
         return redirect(self.get_success_url())
 
 
-class IncomeUpdate(generic.UpdateView):
+class IncomeUpdate(LoginRequiredMixin, generic.UpdateView):
     """収入更新"""
     template_name = 'kakeiboapp/register.html'
     model = Income
@@ -336,7 +348,9 @@ class IncomeUpdate(generic.UpdateView):
         return reverse_lazy('kakeiboapp:income_list')
 
     def form_valid(self, form):
-        self.object = income = form.save()
+        self.object = income = form.save(commit=False)
+        self.object.user = self.request.user
+        self.object.save()
         # messages.info(self.request,
         #               f'収入を更新しました\n'
         #               f'日付:{income.date}\n'
@@ -344,7 +358,7 @@ class IncomeUpdate(generic.UpdateView):
         #               f'金額:{income.price}円')
         return redirect(self.get_success_url())
     
-class RestUpdate(generic.UpdateView):
+class RestUpdate(LoginRequiredMixin, generic.UpdateView):
     """収入更新"""
     template_name = 'kakeiboapp/register.html'
     model = Rest
@@ -368,7 +382,7 @@ class RestUpdate(generic.UpdateView):
     #     return redirect(self.get_success_url())
 
 
-class PaymentDelete(generic.DeleteView):
+class PaymentDelete(LoginRequiredMixin, generic.DeleteView):
     """支出削除"""
     template_name = 'kakeiboapp/delete.html'
     model = Payment
@@ -394,7 +408,7 @@ class PaymentDelete(generic.DeleteView):
         return redirect(self.get_success_url())
 
 
-class IncomeDelete(generic.DeleteView):
+class IncomeDelete(LoginRequiredMixin, generic.DeleteView):
     """収入削除"""
     template_name = 'kakeiboapp/delete.html'
     model = Income
@@ -418,7 +432,7 @@ class IncomeDelete(generic.DeleteView):
         #               f'金額:{income.price}円')
         return redirect(self.get_success_url())
     
-class MonthDashboard(generic.TemplateView):
+class MonthDashboard(LoginRequiredMixin, generic.TemplateView):
     """月間支出ダッシュボード"""
     template_name = 'kakeiboapp/month_dashboard.html'
 
@@ -430,6 +444,8 @@ class MonthDashboard(generic.TemplateView):
         context['year_month'] = f'{year}年{month}月'
 
         # 前月と次月をコンテキストに入れて渡す
+        # next_year, next_month = get_next(year, month)
+        # prev_year, prev_month = get_prev(year, month)
         if month == 1:
             prev_year = year - 1
             prev_month = 12
@@ -457,9 +473,10 @@ class MonthDashboard(generic.TemplateView):
         if not queryset:
             return context
         #データフレーム化
+        
         df = read_frame(queryset,
-                        fieldnames=['date', 'price', 'category'])
-
+                        fieldnames=['date', 'price','category'])
+        # print(df)
         # グラフ作成クラスをインスタンス化
         gen = GraphGenerator()
 
@@ -469,33 +486,40 @@ class MonthDashboard(generic.TemplateView):
         pie_values = [val[0] for val in df_pie.values]
         plot_pie = gen.month_pie(labels=pie_labels, values=pie_values)
         context['plot_pie'] = plot_pie
+        # print(df_pie)
+        # print(pie_labels)
+        # print(pie_values)
 
         # テーブルでのカテゴリと金額の表示用。
         # {カテゴリ:金額,カテゴリ:金額…}の辞書を作る
         context['table_set'] = df_pie.to_dict()['price']
+        print('table_set', df_pie.to_dict()['price'])
 
         # totalの数字を計算して渡す
         context['total_payment'] = df['price'].sum()
+        # print('total_payment')
 
-        # 日別の棒グラフの素材を渡す
+        # # 日別の棒グラフの素材を渡す
         df_bar = pd.pivot_table(df, index='date', values='price', aggfunc=np.sum)
+        print(df_bar)
         dates = list(df_bar.index.values)
         heights = [val[0] for val in df_bar.values]
         plot_bar = gen.month_daily_bar(x_list=dates, y_list=heights)
-        context['plot_bar'] = plot_bar
+        # print(plot_bar)
+        context['plot'] = plot_bar
 
         return context
     
 
     
-class TransitionView(generic.TemplateView):
+class TransitionView(LoginRequiredMixin, generic.TemplateView):
     """月毎の収支推移"""
     template_name = 'kakeiboapp/transition.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        payment_queryset = Payment.objects.all()
-        income_queryset = Income.objects.all()
+        payment_queryset = Payment.objects.filter(user=self.request.user)
+        income_queryset = Income.objects.filter(user=self.request.user)
         self.form = form = TransitionGraphSearchForm(self.request.GET or None)
         context['search_form'] = self.form
 
@@ -531,7 +555,7 @@ class TransitionView(generic.TemplateView):
             months_payment = list(payment_df.index.values)
             payments = [y[0] for y in payment_df.values]
             
-            #カード毎のdf
+            # カード毎のdf
             # payment_carddf = read_frame(payment_cardqueryset, 
             #                             filednames=['date', 'price'])
 

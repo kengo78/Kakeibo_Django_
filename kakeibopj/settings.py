@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'kakeiboapp',
+    'import_export',
 ]
 AUTH_USER_MODEL = 'accounts.User'
 
@@ -58,6 +59,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'kakeiboapp.my_context_processor.common',
             ],
         },
     },
