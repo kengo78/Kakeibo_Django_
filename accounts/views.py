@@ -4,7 +4,7 @@ from django.views.generic import TemplateView, CreateView, DetailView
 from django.contrib.auth import login, authenticate
 from django.urls import reverse_lazy
 from django.contrib.auth.views import LoginView, LogoutView
-from django.contrib.auth.mixins import UserPassesTestMixin
+from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 # Create your views here.
 from .forms import LoginForm, SignUpForm
 from django.contrib.auth import get_user_model
