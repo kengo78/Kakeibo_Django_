@@ -50,6 +50,9 @@
                   <a class="nav-link active" aria-current="page" href="{% url 'kakeiboapp:rest_create' %}">残高登録</a>
                 </li>
                 <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="{% url 'kakeiboapp:want_create' %}">ほしいもの登録</a>
+                </li>
+                <li class="nav-item">
                   <a class="nav-link active" aria-current="page" href="{% url 'kakeiboapp:payment_list' %}">支出一覧</a>
                 </li>
                 <li class="nav-item">
@@ -60,6 +63,9 @@
                 </li>
                 <li class="nav-item">
                   <a class="nav-link active" aria-current="page" href="{% url 'kakeiboapp:transition' %}">収支推移</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="{% url 'kakeiboapp:want_list' %}">欲しいものリスト</a>
                 </li>
                 {% if not user.is_authenticated %}
                 {% comment %} <li class="nav-item">
