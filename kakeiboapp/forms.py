@@ -1,7 +1,7 @@
 
 # from django.contrib.auth.models import User
 from django import forms
-from .models import PaymentCategory,Payment, Income, IncomeCategory, Rest,PaymentCardCategory
+from .models import PaymentCategory,Payment, Income, IncomeCategory, Rest,PaymentCardCategory, Want
 from django.utils import timezone
 from .widgets import CustomRadioSelect
 
@@ -146,6 +146,21 @@ class RestCreateForm(forms.ModelForm):
         model = Rest
         # fields = '__all__'
         fields = ['date', 'category', 'rest']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form'
+            field.widget.attrs['placeholder'] = field.label
+            field.widget.attrs['autocomplete'] = 'off'
+
+class WantCreateForm(forms.ModelForm):
+    """支出登録フォーム"""
+
+    class Meta:
+        model = Want
+        # fields = '__all__'
+        fields = ['name', 'price', 'date', 'url']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
