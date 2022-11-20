@@ -48,3 +48,10 @@ class Rest(models.Model):
     date = models.DateField('日付',default=timezone.now)
     rest = models.IntegerField('金額')
     category = models.ForeignKey(BankCategory, on_delete=models.PROTECT,verbose_name='銀行')
+    
+class Want(models.Model):
+    user = models.ForeignKey(User, verbose_name='ユーザー', on_delete=models.PROTECT)
+    name = models.CharField('名前', max_length=50, blank=False, null=False)
+    price = models.IntegerField('金額')
+    date_buy = models.DateField('日付')
+    
