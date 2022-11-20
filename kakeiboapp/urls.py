@@ -17,4 +17,6 @@ urlpatterns = [
     path('income_delete/<int:pk>/', views.IncomeDelete.as_view(), name='income_delete'),
     path('month_dashboard/<int:year>/<int:month>/', views.MonthDashboard.as_view(), name='month_dashboard'),
     path('transition/', views.TransitionView.as_view(), name='transition'),
+    path('want_list/', views.WantList.as_view(), name='want_list'),
+    path('want_create/', views.WantCreate.as_view(), name='want_create'),
 ]
