@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Payment, Income, PaymentCategory, IncomeCategory, Rest, BankCategory, PaymentCardCategory
+from .models import Payment, Income, PaymentCategory, IncomeCategory, Rest, BankCategory, PaymentCardCategory,Want
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
@@ -69,6 +69,17 @@ class RestAdmin(ImportExportModelAdmin):
 
     resource_class = RestResource
     
+class WantResource(resources.ModelResource):
+    class Meta:
+        model = Want
+        
+class WantAdmin(ImportExportModelAdmin):
+    list_display = ['date', 'name','url','price']
+    # list_filter = ('category',)
+    ordering = ('-date',)
+
+    resource_class = WantResource
+    
         
 class BankCategoryResource(resources.ModelResource):
     class Meta:
@@ -84,4 +95,5 @@ admin.site.register(IncomeCategory, IncomeCategoryAdmin)
 admin.site.register(Payment, PaymentAdmin)
 admin.site.register(Income, IncomeAdmin)
 admin.site.register(Rest, RestAdmin)
+admin.site.register(Want, WantAdmin)
 admin.site.register(BankCategory, BankCategoryAdmin)
