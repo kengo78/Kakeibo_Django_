@@ -209,25 +209,25 @@ class RestList(LoginRequiredMixin, generic.ListView):
     ordering = '-date'
     paginate_by = 10
 
-    def get_queryset(self):
-        queryset = Rest.objects.filter(user=self.request.user).order_by('-created_at')
-        # queryset = super().get_queryset()
-        # # self.form = form = IncomeSearchForm(self.request.GET or None)
+    # def get_queryset(self):
+    #     queryset = Rest.objects.filter(user=self.request.user).order_by('-created_at')
+    #     # queryset = super().get_queryset()
+    #     # # self.form = form = IncomeSearchForm(self.request.GET or None)
 
-        # if form.is_valid():
-        #     year = form.cleaned_data.get('year')
-        #     if year and year != '0':
-        #         queryset = queryset.filter(date__year=year)
+    #     # if form.is_valid():
+    #     #     year = form.cleaned_data.get('year')
+    #     #     if year and year != '0':
+    #     #         queryset = queryset.filter(date__year=year)
 
-        #     month = form.cleaned_data.get('month')
-        #     if month and month != '0':
-        #         queryset = queryset.filter(date__month=month)
+    #     #     month = form.cleaned_data.get('month')
+    #     #     if month and month != '0':
+    #     #         queryset = queryset.filter(date__month=month)
 
-        return queryset
+    #     return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['search_form'] = self.form
+        # context['search_form'] = self.form
 
         return context
     
@@ -237,21 +237,21 @@ class WantList(LoginRequiredMixin, generic.ListView):
     ordering = '-date'
     paginate_by = 10
 
-    def get_queryset(self):
-        queryset = Want.objects.filter(user=self.request.user).order_by('-date')
-        # queryset = super().get_queryset()
-        # # self.form = form = IncomeSearchForm(self.request.GET or None)
+    # def get_queryset(self):
+    #     queryset = Want.objects.filter(user=self.request.user).order_by('-date')
+    #     # queryset = super().get_queryset()
+    #     # # self.form = form = IncomeSearchForm(self.request.GET or None)
 
-        # if form.is_valid():
-        #     year = form.cleaned_data.get('year')
-        #     if year and year != '0':
-        #         queryset = queryset.filter(date__year=year)
+    #     # if form.is_valid():
+    #     #     year = form.cleaned_data.get('year')
+    #     #     if year and year != '0':
+    #     #         queryset = queryset.filter(date__year=year)
 
-        #     month = form.cleaned_data.get('month')
-        #     if month and month != '0':
-        #         queryset = queryset.filter(date__month=month)
+    #     #     month = form.cleaned_data.get('month')
+    #     #     if month and month != '0':
+    #     #         queryset = queryset.filter(date__month=month)
 
-        return queryset
+    #     return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
