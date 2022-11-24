@@ -4,8 +4,8 @@ from django.views import generic
 from django.contrib.auth import login
 from django.urls import reverse_lazy
 
-from .models import Payment, Income,IncomeCategory, PaymentCategory,Rest
-from .forms import PaymentSearchForm, IncomeSearchForm, PaymentCreateForm, IncomeCreateForm, TransitionGraphSearchForm, RestCreateForm 
+from .models import Payment, Income,IncomeCategory, PaymentCategory,Rest, Want
+from .forms import PaymentSearchForm, IncomeSearchForm, PaymentCreateForm, IncomeCreateForm, TransitionGraphSearchForm, RestCreateForm,WantCreateForm
 from django.contrib import messages 
 from django.shortcuts import redirect 
 from django.utils import timezone
@@ -210,7 +210,7 @@ class RestList(LoginRequiredMixin, generic.ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        query_set = Rest.objects.filter(user=self.request.user).order_by('-created_at')
+        queryset = Rest.objects.filter(user=self.request.user).order_by('-created_at')
         # queryset = super().get_queryset()
         # # self.form = form = IncomeSearchForm(self.request.GET or None)
 
@@ -228,6 +228,35 @@ class RestList(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['search_form'] = self.form
+
+        return context
+    
+class WantList(LoginRequiredMixin, generic.ListView):
+    template_name = 'kakeiboapp/want_list.html'
+    model = Want
+    ordering = '-date'
+    paginate_by = 10
+
+    def get_queryset(self):
+        queryset = Want.objects.filter(user=self.request.user).order_by('-date')
+        # queryset = super().get_queryset()
+        # # self.form = form = IncomeSearchForm(self.request.GET or None)
+
+        # if form.is_valid():
+        #     year = form.cleaned_data.get('year')
+        #     if year and year != '0':
+        #         queryset = queryset.filter(date__year=year)
+
+        #     month = form.cleaned_data.get('month')
+        #     if month and month != '0':
+        #         queryset = queryset.filter(date__month=month)
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page_title'] = 'WishList'
+        # context['search_form'] = self.form
 
         return context
     
@@ -306,7 +335,33 @@ class RestCreate(LoginRequiredMixin, generic.CreateView):
         #               f'カテゴリ:{rest.category}\n'
         #               f'金額:{rest.rest}円')
         return redirect(self.get_success_url())
-    
+class WantCreate(LoginRequiredMixin, generic.CreateView):
+    """支出登録"""
+    template_name = 'kakeiboapp/register.html'
+    model = Want
+    form_class = WantCreateForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page_title'] = 'Want Registration'
+        return context
+
+    def get_success_url(self):
+        return reverse_lazy('kakeiboapp:want_list')
+
+    # 追加
+    # バリデーション時にメッセージを保存
+    def form_valid(self, form):
+        self.object = payment = form.save(commit=False)
+        self.object.user = self.request.user
+        self.object.save()
+        # messages.info(self.request,
+        #               f'支出を登録しました\n'
+        #               f'日付:{payment.date}\n'
+        #               f'カテゴリ:{payment.category}\n'
+        #               f'金額:{payment.price}円')
+        return redirect(self.get_success_url())
+
 class PaymentUpdate(LoginRequiredMixin, generic.UpdateView):
     """支出更新"""
     template_name = 'kakeiboapp/register.html'
