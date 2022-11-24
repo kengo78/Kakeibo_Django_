@@ -1,0 +1,32 @@
+{% extends 'kakeiboapp/base.html' %}
+
+{% block content %}
+{% comment %} <h1>{{ page_title }}</h1> {% endcomment %}
+<table class="table mt-3">
+    <tr>
+      <th>日付</th>
+      <th>商品名</th>
+      <th>金額</th>
+      <th>URL</th>
+    </tr>
+    {% for want in want_list %}
+        <tr>
+        <td>{{ want.date }}</td>
+        <td>{{ want.name }}</td>
+        <td>{{ want.price }}</td>
+        <td>{{ want.url }}</td>
+        {% comment %} <td>
+            <div class="manage-btn-area">
+            <div class="update-btn-area">
+                <a class="btn btn-info" href="{% url 'kakeiboapp:rest_update' rest.pk %}">更新</a>
+            </div>
+            <div class="delete-btn-area">
+                {% comment %} <a class="btn btn-danger" href="{% url 'kakeiboapp:rest_delete' rest.pk %}">削除</a> {% endcomment %}
+            {% comment %} </div>
+            </div>
+        </td> {% endcomment %} 
+        </tr>
+    {% endfor %}
+  </table>
+  
+{% endblock %}

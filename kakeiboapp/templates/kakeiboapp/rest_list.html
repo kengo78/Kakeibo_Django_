@@ -1,0 +1,61 @@
+{% extends 'kakeiboapp/base.html' %}
+{% load kakeibo %}
+
+{% block content %}
+<table class="table mt-3">
+    <tr>
+      <th>日付</th>
+      <th>カテゴリ</th>
+      <th>金額</th>
+      <th>概要</th>
+      <th>編集</th> 
+    </tr>
+    {% for rest in rest_list %}
+    <tr>
+      <td>{{ rest.date }}</td>
+      <td>{{ rest.category }}</td>
+      <td>{{ rest.rest}}</td>
+      <td>
+        {% if rest.description %}
+        {{ rest.description }}
+        {% endif %}
+      </td>
+      <td>
+        <div class="manage-btn-area">
+          <div class="update-btn-area">
+            <a class="btn btn-info" href="{% url 'kakeiboapp:rest_update' rest.pk %}">更新</a>
+          </div>
+          <div class="delete-btn-area">
+            {% comment %} <a class="btn btn-danger" href="{% url 'kakeiboapp:rest_delete' rest.pk %}">削除</a> {% endcomment %}
+          </div>
+        </div>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+  
+{% endblock %}
+<!-- javascript -->
+{% block extrajs %}
+<script type="text/javascript">
+  document.addEventListener('DOMContentLoaded', e => {
+    const searchForm = document.getElementById('search-form');
+
+    //カテゴリがクリックされたら検索実行
+    for (const check of document.getElementsByName('category')) {
+      check.addEventListener('change', () => {
+        searchForm.submit();
+      });
+    }
+
+    // 選択済みのカテゴリがクリックされたらチェックを解除して検索実行
+    const selectedCategory = document.querySelector(`input[name='category']:checked`)
+    if (selectedCategory) {
+      selectedCategory.onclick = () => {
+        selectedCategory.checked = false
+        searchForm.submit();
+      }
+    }
+  });
+</script>
+{% endblock %}

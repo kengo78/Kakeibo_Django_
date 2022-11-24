@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'kakeiboapp',
+    'import_export',
 ]
 AUTH_USER_MODEL = 'accounts.User'
 
@@ -58,6 +59,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'kakeiboapp.my_context_processor.common',
             ],
         },
     },
@@ -65,7 +67,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'kakeibopj.wsgi.application'
 LOGIN_URL = 'accounts:login' # ログインのURLの設定
-LOGIN_REDIRECT_URL = 'accounts:home' #ログインが完了した後に遷移するURL
+LOGIN_REDIRECT_URL = 'kakeiboapp:index' #ログインが完了した後に遷移するURL
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
