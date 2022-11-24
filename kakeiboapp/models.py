@@ -53,5 +53,7 @@ class Want(models.Model):
     user = models.ForeignKey(User, verbose_name='ユーザー', on_delete=models.PROTECT)
     name = models.CharField('名前', max_length=50, blank=False, null=False)
     price = models.IntegerField('金額')
-    date_buy = models.DateField('日付')
+    date = models.DateField('日付')
+    created_at = models.DateField('日付',default=timezone.now)
+    url = models.URLField('URL', max_length=1000, null=False)
     
